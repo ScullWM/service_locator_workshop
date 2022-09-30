@@ -34,6 +34,88 @@ services:
     App\EventSubscriber\CommentNotificationSubscriber:
         $sender: '%app.notifications.email_sender%'
 
+
+
+
+    fake_service_1:
+        class: App\Utils\FakeService
+        public: true
+
+    fake_service_2:
+        class: App\Utils\FakeService
+        public: true
+
+    fake_service_3:
+        class: App\Utils\FakeService
+        public: true
+
+    fake_service_4:
+        class: App\Utils\FakeService
+        public: true
+
+
+
+    faking_factory:
+        class: App\Utils\FakingFactory
+        public: true
+        arguments:
+            $services:
+                NL:
+                    - '@fake_service_1'
+                    - '@fake_service_2'
+                FR:
+                    - '@fake_service_3'
+                    - '@fake_service_4'
+                GB:
+                    - '@fake_service_1'
+                    - '@fake_service_2'
+                DE:
+                    - '@fake_service_1'
+                    - '@fake_service_2'
+
+
+
+    # faking_factory:
+    #     class: App\Utils\FakingFactory
+    #     public: true
+    #     arguments:
+    #         $verifierList:
+    #             - !service_locator
+    #                 Fc1: '@fake_service_1'
+    #                 Fc2: '@fake_service_2'
+    #         $services: '%verifier_for_country%'
+
+    # verifier_for_country:
+    #     - 'Fc1'
+    #     - 'Fc2'
+
+    super_factory:
+        class: App\Utils\SuperFactory
+        public: true
+        arguments:
+            $services:
+                NL:
+                    - !service_locator
+                        Fc1: '@fake_service_1'
+                        Fc2: '@fake_service_2'
+                FR:
+                    - !service_locator
+                        Fc1: '@fake_service_3'
+                        Fc2: '@fake_service_4'
+                GB:
+                    - !service_locator
+                        Fc1: '@fake_service_1'
+                        Fc2: '@fake_service_2'
+                DE:
+                    - !service_locator
+                        Fc1: '@fake_service_1'
+                        Fc2: '@fake_service_2'
+
+
+
+
+
+
 when@test:
     services:
         test.user_password_hasher:

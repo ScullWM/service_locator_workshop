@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+
+use App\Kernel;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Stopwatch\Stopwatch;
+
+if (!is_file(dirname(__DIR__).'/vendor/autoload_runtime.php')) {
+    throw new LogicException('Symfony Runtime is missing. Try running "composer require symfony/runtime".');
+}
+
+require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+
+return function (array $context) {
+    $kernel = new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
+
+    $sw = new Stopwatch();
+
+    $sw->start('export-data');
+
+    
+    $a = new Application($kernel);
+    $kernel->boot();
+    $container = $kernel->getContainer();
+
+    // Loading a couple of services
+    $container->get('fake_service_1');
+    $container->get('fake_service_2');
+
+    // Loading the factory
+    // $container->get('faking_factory');
+
+    // Loading the factory
+    // $container->get('super_factory');
+
+
+    $sw->stop('export-data');
+
+    dump((string) $sw->getEvent('export-data'));
+
+    return;
+    return $a;
+};
